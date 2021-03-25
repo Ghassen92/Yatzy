@@ -73,7 +73,7 @@ public class YatzyTest {
     @Test
     public void onePair_should_scores_sum_of_pair_case_two_pair_founded() {
         assertEquals(10, Yatzy.onePair(5, 3, 3, 3, 5));
-        assertEquals(12, Yatzy.onePair(5, 3, 6, 6, 5));;
+        assertEquals(12, Yatzy.onePair(5, 3, 6, 6, 5));
     }
 
     @Test
