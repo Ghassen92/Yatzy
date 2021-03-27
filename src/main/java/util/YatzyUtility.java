@@ -122,10 +122,10 @@ public class YatzyUtility {
         return (isPairFound && isThreeFound) ? pairDiceValue * 2 + threeKindDiceValue * 3 : 0;
     }
 
-    private static int[] getOccurenceTable(int dices[]) {
+    private static int[] getOccurenceTable(int[] dices) {
         int[] counts = new int[6];
-        for (int i = 0; i < dices.length; i++) {
-            counts[dices[i] - 1]++;
+        for (int dice : dices) {
+            counts[dice - 1]++;
         }
         return counts;
     }
