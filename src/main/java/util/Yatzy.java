@@ -3,44 +3,80 @@ package util;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class Yatzy {
 
-    public static int chance(int d1, int d2, int d3, int d4, int d5) {
+    public static int getScore(int d1, int d2, int d3, int d4, int d5, Category category) {
+        switch (category) {
+            case YAHTZEE:
+                return yatzy(d1, d2, d3, d4, d5);
+            case ONES:
+                return ones(d1, d2, d3, d4, d5);
+            case TWOS:
+                return twos(d1, d2, d3, d4, d5);
+            case THREES:
+                return threes(d1, d2, d3, d4, d5);
+            case FOURS:
+                return fours(d1, d2, d3, d4, d5);
+            case FIVES:
+                return fives(d1, d2, d3, d4, d5);
+            case SIXES:
+                return sixes(d1, d2, d3, d4, d5);
+            case ONE_PAIR:
+                return onePair(d1, d2, d3, d4, d5);
+            case TWO_PAIR:
+                return twoPair(d1, d2, d3, d4, d5);
+            case THREE_OF_A_KIND:
+                return threeOfAKind(d1, d2, d3, d4, d5);
+            case FOUR_OF_A_KIND:
+                return fourOfAKind(d1, d2, d3, d4, d5);
+            case SMALL_STRAIGHT:
+                return smallStraight(d1, d2, d3, d4, d5);
+            case LARGE_STRAIGHT:
+                return largeStraight(d1, d2, d3, d4, d5);
+            case FULL_HOUSE:
+                return fullHouse(d1, d2, d3, d4, d5);
+            default:
+                return chance(d1, d2, d3, d4, d5);
+        }
+    }
+
+    private static int chance(int d1, int d2, int d3, int d4, int d5) {
         return d1 + d2 + d3 + d4 + d5;
     }
 
-    public static int yatzy(int d1, int d2, int d3, int d4, int d5) {
-        return List.of(d1, d2, d3, d4, d5).stream().distinct().count() == 1 ? 50 : 0;
+    private static int yatzy(int d1, int d2, int d3, int d4, int d5) {
+        return Stream.of(d1, d2, d3, d4, d5).distinct().count() == 1 ? 50 : 0;
     }
 
-    public static int ones(int d1, int d2, int d3, int d4, int d5) {
+    private static int ones(int d1, int d2, int d3, int d4, int d5) {
         return getOccurrenceOf(d1, d2, d3, d4, d5, 1);
     }
 
-    public static int twos(int d1, int d2, int d3, int d4, int d5) {
+    private static int twos(int d1, int d2, int d3, int d4, int d5) {
         return getOccurrenceOf(d1, d2, d3, d4, d5, 2) * 2;
     }
 
-    public static int threes(int d1, int d2, int d3, int d4, int d5) {
+    private static int threes(int d1, int d2, int d3, int d4, int d5) {
         return getOccurrenceOf(d1, d2, d3, d4, d5, 3) * 3;
     }
 
 
-    public static int fours(int d1, int d2, int d3, int d4, int d5) {
+    private static int fours(int d1, int d2, int d3, int d4, int d5) {
         return getOccurrenceOf(d1, d2, d3, d4, d5, 4) * 4;
     }
 
-    public static int fives(int d1, int d2, int d3, int d4, int d5) {
+    private static int fives(int d1, int d2, int d3, int d4, int d5) {
         return getOccurrenceOf(d1, d2, d3, d4, d5, 5) * 5;
 
     }
 
-    public static int sixes(int d1, int d2, int d3, int d4, int d5) {
+    private static int sixes(int d1, int d2, int d3, int d4, int d5) {
         return getOccurrenceOf(d1, d2, d3, d4, d5, 6) * 6;
     }
 
-    public static int onePair(int d1, int d2, int d3, int d4, int d5) {
+    private static int onePair(int d1, int d2, int d3, int d4, int d5) {
         int[] diceOccurrences = getOccurenceTable(d1, d2, d3, d4, d5);
         for (int i = 0; i < 6; i++)
             if (diceOccurrences[5 - i] >= 2)
@@ -48,7 +84,7 @@ public class Yatzy {
         return 0;
     }
 
-    public static int twoPair(int d1, int d2, int d3, int d4, int d5) {
+    private static int twoPair(int d1, int d2, int d3, int d4, int d5) {
         int[] diceOccurrences = getOccurenceTable(d1, d2, d3, d4, d5);
         int n = 0;
         int score = 0;
@@ -60,7 +96,7 @@ public class Yatzy {
         return n == 2 ? score * 2 : 0;
     }
 
-    public static int fourOfAKind(int d1, int d2, int d3, int d4, int d5) {
+    private static int fourOfAKind(int d1, int d2, int d3, int d4, int d5) {
         int[] diceOccurrences = getOccurenceTable(d1, d2, d3, d4, d5);
 
         for (int i = 0; i < 6; i++)
@@ -69,7 +105,7 @@ public class Yatzy {
         return 0;
     }
 
-    public static int threeOfAKind(int d1, int d2, int d3, int d4, int d5) {
+    private static int threeOfAKind(int d1, int d2, int d3, int d4, int d5) {
         int[] diceOccurrences = getOccurenceTable(d1, d2, d3, d4, d5);
 
         for (int i = 0; i < 6; i++)
@@ -78,7 +114,7 @@ public class Yatzy {
         return 0;
     }
 
-    public static int smallStraight(int d1, int d2, int d3, int d4, int d5) {
+    private static int smallStraight(int d1, int d2, int d3, int d4, int d5) {
         int[] diceOccurrences = getOccurenceTable(d1, d2, d3, d4, d5);
         if (diceOccurrences[0] == 1 &&
                 diceOccurrences[1] == 1 &&
@@ -89,12 +125,12 @@ public class Yatzy {
         return 0;
     }
 
-    public static int largeStraight(int d1, int d2, int d3, int d4, int d5) {
+    private static int largeStraight(int d1, int d2, int d3, int d4, int d5) {
         int[] diceOccurrences = getOccurenceTable(d1, d2, d3, d4, d5);
         return Arrays.stream(diceOccurrences).filter(d -> d == 1).skip(1).count() == 4 ? 20 : 0;
     }
 
-    public static int fullHouse(int d1, int d2, int d3, int d4, int d5) {
+    private static int fullHouse(int d1, int d2, int d3, int d4, int d5) {
         int[] diceOccurrences = getOccurenceTable(d1, d2, d3, d4, d5);
         boolean isPairFound = false;
         int i;
