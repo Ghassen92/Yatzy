@@ -11,7 +11,7 @@ public class YatzyUtility {
     }
 
     public static int getScore(Dice[] dicesRolled, Category category) {
-        int[] dices = Arrays.stream(dicesRolled).mapToInt(d -> d.getValue()).toArray();
+        int[] dices = Arrays.stream(dicesRolled).mapToInt(Dice::getValue).toArray();
 
         switch (category) {
             case YAHTZEE:
@@ -102,28 +102,24 @@ public class YatzyUtility {
     private static int fullHouse(int[] dices) {
         int[] diceOccurrences = getOccurenceTable(dices);
         boolean isPairFound = false;
-        int i;
         int pairDiceValue = 0;
         boolean isThreeFound = false;
         int threeKindDiceValue = 0;
 
 
-        for (i = 0; i < 6; i++)
+        for (int i = 0; i < 6; i++) {
             if (diceOccurrences[i] == 2) {
                 isPairFound = true;
                 pairDiceValue = i + 1;
             }
 
-        for (i = 0; i < 6; i++)
             if (diceOccurrences[i] == 3) {
                 isThreeFound = true;
                 threeKindDiceValue = i + 1;
             }
+        }
 
-        if (isPairFound && isThreeFound)
-            return pairDiceValue * 2 + threeKindDiceValue * 3;
-        else
-            return 0;
+        return (isPairFound && isThreeFound) ? pairDiceValue * 2 + threeKindDiceValue * 3 : 0;
     }
 
     private static int[] getOccurenceTable(int dices[]) {
