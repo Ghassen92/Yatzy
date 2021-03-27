@@ -1,44 +1,50 @@
 package util;
 
+import model.Category;
+import model.Dice;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class Yatzy {
+public class YatzyUtility {
 
-    public static int getScore(int d1, int d2, int d3, int d4, int d5, Category category) {
+    private YatzyUtility() {
+    }
+
+    public static int getScore(Dice d1, Dice d2, Dice d3, Dice d4, Dice d5, Category category) {
         switch (category) {
             case YAHTZEE:
-                return yatzy(d1, d2, d3, d4, d5);
+                return yatzy(d1.getValue(), d2.getValue(), d3.getValue(), d4.getValue(), d5.getValue());
             case ONES:
-                return ones(d1, d2, d3, d4, d5);
+                return sumSameNumberCategory(d1.getValue(), d2.getValue(), d3.getValue(), d4.getValue(), d5.getValue(), 1);
             case TWOS:
-                return twos(d1, d2, d3, d4, d5);
+                return sumSameNumberCategory(d1.getValue(), d2.getValue(), d3.getValue(), d4.getValue(), d5.getValue(), 2);
             case THREES:
-                return threes(d1, d2, d3, d4, d5);
+                return sumSameNumberCategory(d1.getValue(), d2.getValue(), d3.getValue(), d4.getValue(), d5.getValue(), 3);
             case FOURS:
-                return fours(d1, d2, d3, d4, d5);
+                return sumSameNumberCategory(d1.getValue(), d2.getValue(), d3.getValue(), d4.getValue(), d5.getValue(), 4);
             case FIVES:
-                return fives(d1, d2, d3, d4, d5);
+                return sumSameNumberCategory(d1.getValue(), d2.getValue(), d3.getValue(), d4.getValue(), d5.getValue(), 5);
             case SIXES:
-                return sixes(d1, d2, d3, d4, d5);
+                return sumSameNumberCategory(d1.getValue(), d2.getValue(), d3.getValue(), d4.getValue(), d5.getValue(), 6);
             case ONE_PAIR:
-                return onePair(d1, d2, d3, d4, d5);
+                return onePair(d1.getValue(), d2.getValue(), d3.getValue(), d4.getValue(), d5.getValue());
             case TWO_PAIR:
-                return twoPair(d1, d2, d3, d4, d5);
+                return twoPair(d1.getValue(), d2.getValue(), d3.getValue(), d4.getValue(), d5.getValue());
             case THREE_OF_A_KIND:
-                return threeOfAKind(d1, d2, d3, d4, d5);
+                return threeOfAKind(d1.getValue(), d2.getValue(), d3.getValue(), d4.getValue(), d5.getValue());
             case FOUR_OF_A_KIND:
-                return fourOfAKind(d1, d2, d3, d4, d5);
+                return fourOfAKind(d1.getValue(), d2.getValue(), d3.getValue(), d4.getValue(), d5.getValue());
             case SMALL_STRAIGHT:
-                return smallStraight(d1, d2, d3, d4, d5);
+                return smallStraight(d1.getValue(), d2.getValue(), d3.getValue(), d4.getValue(), d5.getValue());
             case LARGE_STRAIGHT:
-                return largeStraight(d1, d2, d3, d4, d5);
+                return largeStraight(d1.getValue(), d2.getValue(), d3.getValue(), d4.getValue(), d5.getValue());
             case FULL_HOUSE:
-                return fullHouse(d1, d2, d3, d4, d5);
+                return fullHouse(d1.getValue(), d2.getValue(), d3.getValue(), d4.getValue(), d5.getValue());
             default:
-                return chance(d1, d2, d3, d4, d5);
+                return chance(d1.getValue(), d2.getValue(), d3.getValue(), d4.getValue(), d5.getValue());
         }
     }
 
@@ -50,31 +56,10 @@ public class Yatzy {
         return Stream.of(d1, d2, d3, d4, d5).distinct().count() == 1 ? 50 : 0;
     }
 
-    private static int ones(int d1, int d2, int d3, int d4, int d5) {
-        return getOccurrenceOf(d1, d2, d3, d4, d5, 1);
+    private static int sumSameNumberCategory(int d1, int d2, int d3, int d4, int d5, int target) {
+        return Collections.frequency(List.of(d1, d2, d3, d4, d5), target) * target;
     }
 
-    private static int twos(int d1, int d2, int d3, int d4, int d5) {
-        return getOccurrenceOf(d1, d2, d3, d4, d5, 2) * 2;
-    }
-
-    private static int threes(int d1, int d2, int d3, int d4, int d5) {
-        return getOccurrenceOf(d1, d2, d3, d4, d5, 3) * 3;
-    }
-
-
-    private static int fours(int d1, int d2, int d3, int d4, int d5) {
-        return getOccurrenceOf(d1, d2, d3, d4, d5, 4) * 4;
-    }
-
-    private static int fives(int d1, int d2, int d3, int d4, int d5) {
-        return getOccurrenceOf(d1, d2, d3, d4, d5, 5) * 5;
-
-    }
-
-    private static int sixes(int d1, int d2, int d3, int d4, int d5) {
-        return getOccurrenceOf(d1, d2, d3, d4, d5, 6) * 6;
-    }
 
     private static int onePair(int d1, int d2, int d3, int d4, int d5) {
         int[] diceOccurrences = getOccurenceTable(d1, d2, d3, d4, d5);
@@ -165,9 +150,5 @@ public class Yatzy {
         counts[d4 - 1]++;
         counts[d5 - 1]++;
         return counts;
-    }
-
-    private static int getOccurrenceOf(int d1, int d2, int d3, int d4, int d5, int target) {
-        return Collections.frequency(List.of(d1, d2, d3, d4, d5), target);
     }
 }
