@@ -117,6 +117,8 @@ public class YatzyUtility {
                 isThreeFound = true;
                 threeKindDiceValue = i + 1;
             }
+
+            if (isPairFound && isThreeFound) break;
         }
 
         return (isPairFound && isThreeFound) ? pairDiceValue * 2 + threeKindDiceValue * 3 : 0;
